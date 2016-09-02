@@ -1,0 +1,22 @@
+{
+  "name": "restapi",
+  "version": "1.0.0",
+  "description": "API created with express framework, nodeJS, mongoDB and Mongoose ORM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sepalacio/ExpressApi.git"
+  },
+  "author": "Sebastian palacio <sebastianpalacio327@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sepalacio/ExpressApi/issues"
+  },
+  "homepage": "https://github.com/sepalacio/ExpressApi#readme",
+  "dependencies": {
+    "mongoose": "^4.5.10"
+  }
+}
