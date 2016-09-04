@@ -6,7 +6,9 @@ const User = mongoose.model('User')
 //Get Return all the users from BD
 exports.findAllUsers = (req, res) => {
   console.log('GET / Users')
-  User.find((err, users) => {
+  User.find({
+    status: 1
+  }, (err, users) => {
     if (err) res.send(500, err.message)
     res.status(200).json(users)
   })
@@ -32,11 +34,14 @@ exports.addUser = (req, res) => {
     lastname: req.body.lastname,
     username: req.body.username,
     email: req.body.email,
+    age: req.body.age,
     gender: req.body.gender
   })
 
   user.save((err, user) => {
-    if (err) res.send(500, err.message)
+    if (err) return res.status(500).send({
+      message: err.message
+    })
     res.status(200).json(user)
   })
 }
@@ -57,6 +62,7 @@ exports.updateUser = (req, res) => {
     user.lastname = req.body.lastname
     user.username = req.body.username
     user.email = req.body.email
+    user.age = req.body.age
     user.gender = req.body.gender
 
     user.save((err) => {
@@ -64,49 +70,46 @@ exports.updateUser = (req, res) => {
       return res.status(200).json(user)
     })
   })
+}
 
-  //DELETE - Delete a User with specified ID
-  exports.deleteUser = (req, res) => {
-    const id = req.params.id
-    console.log(`DELETE /users/${id}`)
+//DELETE - Delete a User with specified ID
+exports.deleteUser = (req, res) => {
+  const id = req.params.id
+  console.log(`DELETE /users/${id}`)
 
-    User.findById(id, (err, user) => {
+  User.findById(id, (err, user) => {
 
-      if (!user) return res.status(404).send({
-        message: 'User not exist'
-      })
-
-      user.remove((err) => {
-        if (err) return res.status(500).send(err.message)
-        res.status(200).json({
-          message: 'User deleted'
-        })
-      })
+    if (!user) return res.status(404).send({
+      message: 'User not exist'
     })
-  }
 
-
-  // Toggle user status in BD
-  exports.deactivateUser = (req, res) => {
-    const id = req.params.id
-    console.log(`PUT /users/${id}`)
-
-    User.findOneAndUpdate({
-      _id: id
-    }, {
-      status: 2
-    }, (err, user) => {
+    user.remove((err) => {
       if (err) return res.status(500).send(err.message)
-
-      if (!user) return res.status(404).send({
-        message: 'The user does not exist'
-      })
-
       res.status(200).json({
-        message: 'User desactivated sucessfully'
+        message: 'User deleted'
       })
     })
+  })
+}
 
-  }
+// Toggle user status in BD
+exports.deactivateUser = (req, res) => {
+  const id = req.params.id
+  console.log(`PUT /users/${id}`)
 
+  User.findOneAndUpdate({
+    _id: id
+  }, {
+    status: 2
+  }, (err, user) => {
+    if (err) return res.status(500).send(err.message)
+
+    if (!user) return res.status(404).send({
+      message: 'The user does not exist'
+    })
+
+    res.status(200).json({
+      message: 'User desactivated sucessfully'
+    })
+  })
 }

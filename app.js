@@ -18,21 +18,27 @@ app.get('/', (req, res) => {
   res.render('index.html')
 })
 
+/**
+ * Routes for managing users * 
+ * */
+
 var users = express.Router()
 
 users.route('/users')
   .get(UserCtrl.findAllUsers)
   .post(UserCtrl.addUser)
 
-// users.route('/users/deactivateUser')
-//   .put(UserCtrl.deactivateUser)
-
 users.route('/users/:id')
   .get(UserCtrl.findById)
   .put(UserCtrl.updateUser)
   .delete(UserCtrl.deleteUser)
 
+users.route('/users/status/:id')
+  .put(UserCtrl.deactivateUser)
+
 app.use('/api', users)
+
+/* ____________________________ */
 
 mongoose.connect('mongodb://localhost/apptest', (err, res) => {
   if (err) return console.error(`ERROR: connecting to Database. ${err}`)
@@ -40,5 +46,4 @@ mongoose.connect('mongodb://localhost/apptest', (err, res) => {
   app.listen(port, () => {
     console.log(`Server running in http://localhost:${port}/`)
   })
-
 })

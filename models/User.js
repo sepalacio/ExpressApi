@@ -35,7 +35,7 @@ var UserSchema = new Schema({
     },
     gender: {
       type: String,
-      enum: ['Man', 'Female']
+      enum: ['Male', 'Female']
     },
     status: {
       type: Number,
